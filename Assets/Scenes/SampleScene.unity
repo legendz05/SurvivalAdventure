@@ -459,6 +459,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 878be42445402e14b9036cd95ecf8a59, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAction
+  interactables: []
+  canInteract: 0
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
@@ -630,9 +632,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 849785766}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2e78cac07530fc540bca156a00c7c88d, type: 3}
+  m_Script: {fileID: 11500000, guid: 6b32611fef6fca547a71aff125963de0, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Interactable
+  m_EditorClassIdentifier: Assembly-CSharp::CraftingTable
+  isCurrentlyInteractingWith: 0
 --- !u!1 &1012155826
 GameObject:
   m_ObjectHideFlags: 0
@@ -867,9 +870,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1214170219}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2e78cac07530fc540bca156a00c7c88d, type: 3}
+  m_Script: {fileID: 11500000, guid: c65504a14af2cf241a4568a44af1468f, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Interactable
+  m_EditorClassIdentifier: Assembly-CSharp::Chest
+  isCurrentlyInteractingWith: 0
 --- !u!1 &1351363919
 GameObject:
   m_ObjectHideFlags: 0

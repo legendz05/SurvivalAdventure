@@ -8,6 +8,7 @@ public class PlayerAction : MonoBehaviour
 
     public void Interact()
     {
+        interactables[0].Interact();
         Debug.Log($"Interacted with: {interactables[0].name}");
     }
 

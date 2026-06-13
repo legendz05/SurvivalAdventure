@@ -2,15 +2,10 @@ using UnityEngine;
 
 public class Interactable : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+    public bool isCurrentlyInteractingWith = false;
 
-    // Update is called once per frame
-    void Update()
+    public virtual void Interact()
     {
-        
+        isCurrentlyInteractingWith = true;
     }
 }
