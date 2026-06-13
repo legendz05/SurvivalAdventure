@@ -2,24 +2,32 @@ using UnityEngine;
 
 public class InputManager : MonoBehaviour
 {
-    PlayerControls playerControls;
+    private PlayerControls playerControls;
 
-    Vector2 movementInput;
+    private Vector2 movementInput;
+
     public float verticalInput;
     public float horizontalInput;
 
-    public bool jumpToggle = false;
-
+    public bool jumpInput;
 
     private void OnEnable()
     {
         if (playerControls == null)
         {
             playerControls = new PlayerControls();
-            playerControls.PlayerMovement.Movement.performed += i => movementInput = i.ReadValue<Vector2>();
-            playerControls.PlayerMovement.Movement.canceled += i => movementInput = Vector2.zero;
-            playerControls.PlayerMovement.Jump.performed += i => jumpToggle = i.ReadValueAsButton();
-            playerControls.PlayerMovement.Jump.canceled += i => jumpToggle = false;
+
+            playerControls.PlayerMovement.Movement.performed += i =>
+                movementInput = i.ReadValue<Vector2>();
+
+            playerControls.PlayerMovement.Movement.canceled += i =>
+                movementInput = Vector2.zero;
+
+            playerControls.PlayerMovement.Jump.performed += i =>
+                jumpInput = i.ReadValueAsButton();
+
+            playerControls.PlayerMovement.Jump.canceled += i =>
+              jumpInput = i.ReadValueAsButton();
         }
 
         playerControls.Enable();
@@ -33,7 +41,6 @@ public class InputManager : MonoBehaviour
     public void HandleAllInputs()
     {
         HandleMovementInput();
-        HandleJump();
     }
 
     private void HandleMovementInput()
@@ -42,11 +49,8 @@ public class InputManager : MonoBehaviour
         horizontalInput = movementInput.x;
     }
 
-    private bool HandleJump()
+    public void HandleResetJump()
     {
-        if (jumpToggle)
-            return true;
-
-        return false;
+        jumpInput = false;
     }
 }

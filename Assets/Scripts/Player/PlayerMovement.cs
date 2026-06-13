@@ -25,9 +25,9 @@ public class PlayerMovement : MonoBehaviour
         HandleRotation();
     }
 
-    public void HandleJumps()
+    public void HandleJump()
     {
-        HandleJump();
+        rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
     }
 
     private Vector3 GetCameraRelativeMoveDirection()
@@ -43,7 +43,9 @@ public class PlayerMovement : MonoBehaviour
         cameraRight.y = 0f;
         cameraRight.Normalize();
 
-        Vector3 moveDirection = cameraForward * inputManager.verticalInput + cameraRight * inputManager.horizontalInput;
+        Vector3 moveDirection =
+            cameraForward * inputManager.verticalInput +
+            cameraRight * inputManager.horizontalInput;
 
         moveDirection.Normalize();
 
@@ -54,7 +56,8 @@ public class PlayerMovement : MonoBehaviour
     {
         Vector3 moveDirection = GetCameraRelativeMoveDirection();
 
-        Vector3 targetPosition = rb.position + moveDirection * movementSpeed * Time.fixedDeltaTime;
+        Vector3 targetPosition =
+            rb.position + moveDirection * movementSpeed * Time.fixedDeltaTime;
 
         rb.MovePosition(targetPosition);
     }
@@ -68,14 +71,12 @@ public class PlayerMovement : MonoBehaviour
 
         Quaternion targetRotation = Quaternion.LookRotation(targetDirection);
 
-        Quaternion smoothedRotation = Quaternion.Slerp(rb.rotation, targetRotation, rotationSpeed * Time.fixedDeltaTime);
+        Quaternion smoothedRotation = Quaternion.Slerp(
+            rb.rotation,
+            targetRotation,
+            rotationSpeed * Time.fixedDeltaTime
+        );
 
         rb.MoveRotation(smoothedRotation);
-    }
-
-    private void HandleJump()
-    {
-        if (inputManager.jumpToggle)
-            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
     }
 }

@@ -238,6 +238,7 @@ GameObject:
   - component: {fileID: 2425906443722059960}
   - component: {fileID: 6540370768414375184}
   - component: {fileID: 5411309381873605469}
+  - component: {fileID: 4744769119428102581}
   - component: {fileID: 2227803180168418944}
   m_Layer: 0
   m_Name: Player
@@ -277,6 +278,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::InputManager
   verticalInput: 0
   horizontalInput: 0
+  jumpInput: 0
 --- !u!114 &6540370768414375184
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -291,6 +293,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
   movementSpeed: 5
   rotationSpeed: 5
+  jumpForce: 5
 --- !u!114 &5411309381873605469
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -303,6 +306,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab1fd56ea055be84c9772e6595bd2da0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerManager
+--- !u!114 &4744769119428102581
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6261252180367692847}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f801e51f62054094f831536ebdb861e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerCollision
+  isGrounded: 0
 --- !u!54 &2227803180168418944
 Rigidbody:
   m_ObjectHideFlags: 0

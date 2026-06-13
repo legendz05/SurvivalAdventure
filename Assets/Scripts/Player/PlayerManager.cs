@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class PlayerManager : MonoBehaviour
 {
-    InputManager inputManager;
-    PlayerMovement playerMovement;
+    private InputManager inputManager;
+    private PlayerMovement playerMovement;
     private PlayerCollision playerCollision;
 
     private void Awake()
@@ -21,9 +21,12 @@ public class PlayerManager : MonoBehaviour
     private void FixedUpdate()
     {
         playerMovement.HandleAllMovement();
-        playerMovement.HandleJumps();
 
-        if (playerCollision.isGrounded)
-            playerMovement.HandleJumps();
+        if (inputManager.jumpInput && playerCollision.isGrounded)
+        {
+            playerMovement.HandleJump();
+        }
+
+        inputManager.HandleResetJump();
     }
 }
