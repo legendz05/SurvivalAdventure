@@ -10,6 +10,7 @@ public class InputManager : MonoBehaviour
     public float horizontalInput;
 
     public bool jumpInput;
+    public bool interactInput;
 
     private void OnEnable()
     {
@@ -28,6 +29,12 @@ public class InputManager : MonoBehaviour
 
             playerControls.PlayerMovement.Jump.canceled += i =>
               jumpInput = i.ReadValueAsButton();
+
+            playerControls.PlayerAction.Interact.performed += i =>
+              interactInput = i.ReadValueAsButton();
+
+            playerControls.PlayerAction.Interact.canceled += i =>
+             interactInput = i.ReadValueAsButton();
         }
 
         playerControls.Enable();
@@ -38,19 +45,17 @@ public class InputManager : MonoBehaviour
         playerControls.Disable();
     }
 
-    public void HandleAllInputs()
-    {
-        HandleMovementInput();
-    }
-
-    private void HandleMovementInput()
+    public void HandleMovementInput()
     {
         verticalInput = movementInput.y;
         horizontalInput = movementInput.x;
     }
 
-    public void HandleResetJump()
+    public void HandleResetJump() => jumpInput = false;
+    public void HandleResetInteract() => interactInput = false;
+
+    public bool HasPressedInteract()
     {
-        jumpInput = false;
+        return interactInput;
     }
 }
