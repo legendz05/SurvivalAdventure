@@ -15,6 +15,8 @@ public class InputManager : MonoBehaviour
     public bool interactInput;
     public bool escapeInteractInput;
     public bool sprintInput;
+    public bool openInventoryInput;
+    public bool closeInventoryInput;
 
     private void OnEnable()
     {
@@ -36,6 +38,9 @@ public class InputManager : MonoBehaviour
 
             playerControls.PlayerMovement.Sprint.performed += i => sprintInput = i.ReadValueAsButton();
             playerControls.PlayerMovement.Sprint.canceled += i => sprintInput = i.ReadValueAsButton();
+
+            playerControls.PlayerAction.OpenInventory.performed += i => openInventoryInput = i.ReadValueAsButton();
+            playerControls.Inventory.CloseInventory.performed += i => closeInventoryInput = i.ReadValueAsButton();
         }
 
         playerControls.Enable();
