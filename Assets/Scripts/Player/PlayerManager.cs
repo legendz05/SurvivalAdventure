@@ -17,6 +17,12 @@ public class PlayerManager : MonoBehaviour
 
     private void Update()
     {
+        if (inputManager.openInventoryInput && !InventoryManager.Instance.inventoryOpen)
+            InventoryManager.Instance.OpenInventory();
+
+        if (inputManager.closeInventoryInput && InventoryManager.Instance.inventoryOpen)
+            InventoryManager.Instance.CloseInventory();
+
         inputManager.HandleMovementInput();
 
         if (inputManager.HasPressedInteract())

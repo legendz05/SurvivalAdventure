@@ -40,7 +40,9 @@ public class InputManager : MonoBehaviour
             playerControls.PlayerMovement.Sprint.canceled += i => sprintInput = i.ReadValueAsButton();
 
             playerControls.PlayerAction.OpenInventory.performed += i => openInventoryInput = i.ReadValueAsButton();
+            playerControls.PlayerAction.OpenInventory.canceled += i => openInventoryInput = i.ReadValueAsButton();
             playerControls.Inventory.CloseInventory.performed += i => closeInventoryInput = i.ReadValueAsButton();
+            playerControls.Inventory.CloseInventory.canceled += i => closeInventoryInput = i.ReadValueAsButton();
         }
 
         playerControls.Enable();
