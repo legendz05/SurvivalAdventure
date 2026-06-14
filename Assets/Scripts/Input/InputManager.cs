@@ -1,4 +1,6 @@
+using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class InputManager : MonoBehaviour
 {
@@ -11,6 +13,7 @@ public class InputManager : MonoBehaviour
 
     public bool jumpInput;
     public bool interactInput;
+    public bool escapeInteractInput;
 
     private void OnEnable()
     {
@@ -18,23 +21,17 @@ public class InputManager : MonoBehaviour
         {
             playerControls = new PlayerControls();
 
-            playerControls.PlayerMovement.Movement.performed += i =>
-                movementInput = i.ReadValue<Vector2>();
+            playerControls.PlayerMovement.Movement.performed += i => movementInput = i.ReadValue<Vector2>();
+            playerControls.PlayerMovement.Movement.canceled += i => movementInput = Vector2.zero;
 
-            playerControls.PlayerMovement.Movement.canceled += i =>
-                movementInput = Vector2.zero;
+            playerControls.PlayerMovement.Jump.performed += i => jumpInput = i.ReadValueAsButton();
+            playerControls.PlayerMovement.Jump.canceled += i => jumpInput = i.ReadValueAsButton();
 
-            playerControls.PlayerMovement.Jump.performed += i =>
-                jumpInput = i.ReadValueAsButton();
+            playerControls.PlayerAction.Interact.performed += i => interactInput = i.ReadValueAsButton();
+            playerControls.PlayerAction.Interact.canceled += i => interactInput = i.ReadValueAsButton();
 
-            playerControls.PlayerMovement.Jump.canceled += i =>
-              jumpInput = i.ReadValueAsButton();
-
-            playerControls.PlayerAction.Interact.performed += i =>
-              interactInput = i.ReadValueAsButton();
-
-            playerControls.PlayerAction.Interact.canceled += i =>
-             interactInput = i.ReadValueAsButton();
+            playerControls.PlayerAction.CloseInteraction.performed += i => escapeInteractInput = i.ReadValueAsButton();
+            playerControls.PlayerAction.CloseInteraction.canceled += i => escapeInteractInput = i.ReadValueAsButton();
         }
 
         playerControls.Enable();
@@ -45,6 +42,16 @@ public class InputManager : MonoBehaviour
         playerControls.Disable();
     }
 
+    public void DisableMovement()
+    {
+        playerControls.PlayerMovement.Disable();
+    }
+
+    public void EnableMovement()
+    {
+        playerControls.PlayerMovement.Enable();
+    }
+
     public void HandleMovementInput()
     {
         verticalInput = movementInput.y;
@@ -53,9 +60,11 @@ public class InputManager : MonoBehaviour
 
     public void HandleResetJump() => jumpInput = false;
     public void HandleResetInteract() => interactInput = false;
+    public void HandleResetCloseInteract() => escapeInteractInput = false;
 
     public bool HasPressedInteract()
-    {
-        return interactInput;
-    }
+    { return interactInput; }
+
+    public bool HasPressedExitInteract()
+    { return escapeInteractInput; }
 }

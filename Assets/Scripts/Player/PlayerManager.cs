@@ -19,10 +19,16 @@ public class PlayerManager : MonoBehaviour
     {
         inputManager.HandleMovementInput();
 
-        if (inputManager.HasPressedInteract() && action.canInteract)
+        if (inputManager.HasPressedInteract())
         {
             action.Interact();
             inputManager.HandleResetInteract();
+        }
+
+        if (inputManager.HasPressedExitInteract())
+        {
+            action.CloseInteraction();
+            inputManager.HandleResetCloseInteract();
         }
     }
 
