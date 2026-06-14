@@ -53,8 +53,23 @@ public class InputManager : MonoBehaviour
 
     public void DisableMovement() => playerControls.PlayerMovement.Disable();
     public void EnableMovement() => playerControls.PlayerMovement.Enable();
+    public void DisableActions() => playerControls.PlayerAction.Disable();
+    public void EnableActions() => playerControls.PlayerAction.Enable();
     public void ToggleCursorVisibility(bool visible) => Cursor.visible = visible;
 
+    public void EnableInventoryControls()
+    {
+        playerControls.Inventory.Enable();
+        DisableMovement();
+        DisableActions();
+    }
+
+    public void DisableInventoryControls()
+    {
+        playerControls.Inventory.Disable();
+        EnableActions();
+        EnableMovement();
+    }
 
     public void HandleMovementInput()
     {
