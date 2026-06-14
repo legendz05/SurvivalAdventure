@@ -30,6 +30,8 @@ public class PlayerManager : MonoBehaviour
             action.CloseInteraction();
             inputManager.HandleResetCloseInteract();
         }
+
+        playerMovement.HandleSpeed(inputManager.IsHoldingSprintInput());
     }
 
     private void FixedUpdate()

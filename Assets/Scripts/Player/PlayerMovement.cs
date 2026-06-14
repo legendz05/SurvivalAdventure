@@ -9,6 +9,8 @@ public class PlayerMovement : MonoBehaviour
     public float movementSpeed = 5f;
     public float rotationSpeed = 10f;
     public float jumpForce = 10f;
+    float sprintSpeed;
+    float oldSpeed;
 
     private void Awake()
     {
@@ -17,6 +19,9 @@ public class PlayerMovement : MonoBehaviour
 
         if (Camera.main != null)
             mainCamera = Camera.main.transform;
+
+        sprintSpeed = movementSpeed * 2f;
+        oldSpeed = movementSpeed;
     }
 
     public void HandleAllMovement()
@@ -28,6 +33,17 @@ public class PlayerMovement : MonoBehaviour
     public void HandleJump()
     {
         rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+    }
+
+    public void HandleSpeed(bool isSprinting)
+    {
+        //Debug.Log(isSprinting);
+
+        if (isSprinting)
+            movementSpeed = sprintSpeed;
+        else
+            movementSpeed = oldSpeed;
+
     }
 
     private Vector3 GetCameraRelativeMoveDirection()

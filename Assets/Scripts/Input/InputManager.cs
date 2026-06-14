@@ -14,6 +14,7 @@ public class InputManager : MonoBehaviour
     public bool jumpInput;
     public bool interactInput;
     public bool escapeInteractInput;
+    public bool sprintInput;
 
     private void OnEnable()
     {
@@ -32,6 +33,9 @@ public class InputManager : MonoBehaviour
 
             playerControls.PlayerAction.CloseInteraction.performed += i => escapeInteractInput = i.ReadValueAsButton();
             playerControls.PlayerAction.CloseInteraction.canceled += i => escapeInteractInput = i.ReadValueAsButton();
+
+            playerControls.PlayerMovement.Sprint.performed += i => sprintInput = i.ReadValueAsButton();
+            playerControls.PlayerMovement.Sprint.canceled += i => sprintInput = i.ReadValueAsButton();
         }
 
         playerControls.Enable();
@@ -42,15 +46,10 @@ public class InputManager : MonoBehaviour
         playerControls.Disable();
     }
 
-    public void DisableMovement()
-    {
-        playerControls.PlayerMovement.Disable();
-    }
+    public void DisableMovement() => playerControls.PlayerMovement.Disable();
+    public void EnableMovement() => playerControls.PlayerMovement.Enable();
+    public void ToggleCursorVisibility(bool visible) => Cursor.visible = visible;
 
-    public void EnableMovement()
-    {
-        playerControls.PlayerMovement.Enable();
-    }
 
     public void HandleMovementInput()
     {
@@ -67,4 +66,7 @@ public class InputManager : MonoBehaviour
 
     public bool HasPressedExitInteract()
     { return escapeInteractInput; }
+
+    public bool IsHoldingSprintInput()
+    { return sprintInput; }
 }

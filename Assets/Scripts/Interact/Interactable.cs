@@ -18,5 +18,6 @@ public class Interactable : MonoBehaviour
     public virtual void CloseInteraction()
     {
         isCurrentlyInteractingWith = false;
+        inputManager.ToggleCursorVisibility(false);
     }
 }

@@ -10,6 +10,7 @@ public class CraftingTable : Interactable
         GetComponent<MeshRenderer>().material.color = Color.red;
 
         inputManager.DisableMovement();
+        inputManager.ToggleCursorVisibility(true);
     }
 
     public override void CloseInteraction()

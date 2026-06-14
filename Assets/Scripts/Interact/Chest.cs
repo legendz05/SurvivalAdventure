@@ -9,6 +9,7 @@ public class Chest : Interactable
         gameObject.transform.localScale = Vector3.one * 5;
 
         inputManager.DisableMovement();
+        inputManager.ToggleCursorVisibility(true);
     }
 
     public override void CloseInteraction()
