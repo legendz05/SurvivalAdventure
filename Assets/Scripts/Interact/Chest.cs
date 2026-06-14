@@ -10,6 +10,7 @@ public class Chest : Interactable
 
         inputManager.DisableMovement();
         inputManager.ToggleCursorVisibility(true);
+        inputManager.DisableCameraLook();
     }
 
     public override void CloseInteraction()
@@ -19,5 +20,6 @@ public class Chest : Interactable
         gameObject.transform.localScale = Vector3.one;
 
         inputManager.EnableMovement();
+        inputManager.EnableCameraLook();
     }
 }

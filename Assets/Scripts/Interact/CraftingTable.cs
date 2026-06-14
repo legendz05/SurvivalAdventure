@@ -11,6 +11,7 @@ public class CraftingTable : Interactable
 
         inputManager.DisableMovement();
         inputManager.ToggleCursorVisibility(true);
+        inputManager.DisableCameraLook();
     }
 
     public override void CloseInteraction()
@@ -18,5 +19,6 @@ public class CraftingTable : Interactable
         GetComponent<MeshRenderer>().material.color = Color.green;
 
         inputManager.EnableMovement();
+        inputManager.EnableCameraLook();
     }
 }

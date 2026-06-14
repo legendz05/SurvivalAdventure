@@ -5560,6 +5560,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b57380414d8eb2c45a0d7caab10fcd5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  inventoryOpen: 0
 --- !u!1 &1872026527
 GameObject:
   m_ObjectHideFlags: 0
@@ -6283,6 +6284,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2425906443722059960, guid: 8f91e394c1d42074cb60b32a489a0a84, type: 3}
+      propertyPath: camController
+      value: 
+      objectReference: {fileID: 1604857798}
     - target: {fileID: 6261252180367692847, guid: 8f91e394c1d42074cb60b32a489a0a84, type: 3}
       propertyPath: m_Name
       value: Player

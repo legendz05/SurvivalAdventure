@@ -1,9 +1,11 @@
 using System.Runtime.InteropServices.WindowsRuntime;
+using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class InputManager : MonoBehaviour
 {
+    public CinemachineInputAxisController camController;
     private PlayerControls playerControls;
 
     private Vector2 movementInput;
@@ -64,6 +66,7 @@ public class InputManager : MonoBehaviour
         playerControls.Inventory.Enable();
         DisableMovement();
         DisableActions();
+        DisableCameraLook();
     }
 
     public void DisableInventoryControls()
@@ -71,6 +74,17 @@ public class InputManager : MonoBehaviour
         playerControls.Inventory.Disable();
         EnableActions();
         EnableMovement();
+        EnableCameraLook();
+    }
+
+    public void DisableCameraLook()
+    {
+        camController.enabled = false;
+    }
+
+    public void EnableCameraLook()
+    {
+        camController.enabled = true;
     }
 
     public void HandleMovementInput()
