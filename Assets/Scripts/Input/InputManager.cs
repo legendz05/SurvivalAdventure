@@ -1,5 +1,6 @@
 using System.Runtime.InteropServices.WindowsRuntime;
 using Unity.Cinemachine;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -19,6 +20,7 @@ public class InputManager : MonoBehaviour
     public bool sprintInput;
     public bool openInventoryInput;
     public bool closeInventoryInput;
+    public bool selectInput;
 
     private void OnEnable()
     {
@@ -45,9 +47,13 @@ public class InputManager : MonoBehaviour
             playerControls.PlayerAction.OpenInventory.canceled += i => openInventoryInput = i.ReadValueAsButton();
             playerControls.Inventory.CloseInventory.performed += i => closeInventoryInput = i.ReadValueAsButton();
             playerControls.Inventory.CloseInventory.canceled += i => closeInventoryInput = i.ReadValueAsButton();
+
+            playerControls.Inventory.Select.performed += i => selectInput = i.ReadValueAsButton();
+            playerControls.Inventory.Select.canceled += i => selectInput = i.ReadValueAsButton();
         }
 
         playerControls.Enable();
+        playerControls.Inventory.Disable();
     }
 
     private void OnDisable()
@@ -105,4 +111,7 @@ public class InputManager : MonoBehaviour
 
     public bool IsHoldingSprintInput()
     { return sprintInput; }
+
+    public bool HasPressedSelect()
+    { return selectInput; }
 }

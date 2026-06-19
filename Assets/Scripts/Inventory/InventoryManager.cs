@@ -15,6 +15,7 @@ public class InventoryManager : MonoBehaviour
     public bool inventoryOpen = false;
 
     public InventorySlot highlightedSlot;
+    public InventorySlot selectedSlot;
 
     private void Awake()
     {
@@ -68,7 +69,7 @@ public class InventoryManager : MonoBehaviour
         {
             if (result.gameObject.TryGetComponent(out InventorySlot slot))
             {
-                Debug.Log("Slot");
+                // Debug.Log("Slot");
                 highlightedSlot = slot;
                 return;
             }
@@ -77,5 +78,12 @@ public class InventoryManager : MonoBehaviour
                 highlightedSlot = null;
             }
         }
+    }
+
+    public void SelectSlot(InventorySlot slot)
+    {
+        if (slot == null) return;
+
+        slot.OnSelect();
     }
 }

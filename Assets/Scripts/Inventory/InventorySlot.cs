@@ -1,14 +1,21 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class InventorySlot : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
+    Color startColor;
+    Image image;
 
+    private void Awake()
+    {
+        image = GetComponent<Image>();
     }
 
-    // Update is called once per frame
+    void Start()
+    {
+        startColor = image.color;
+    }
+
     void Update()
     {
         if (InventoryManager.Instance.highlightedSlot == this)
@@ -19,5 +26,16 @@ public class InventorySlot : MonoBehaviour
         {
             transform.localScale = Vector3.one;
         }
+
+        if (InventoryManager.Instance.selectedSlot != this)
+        {
+            image.color = startColor;
+        }
+    }
+
+    public void OnSelect()
+    {
+        image.color = Color.green;
+        InventoryManager.Instance.selectedSlot = this;
     }
 }

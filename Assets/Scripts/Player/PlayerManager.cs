@@ -37,6 +37,11 @@ public class PlayerManager : MonoBehaviour
             inputManager.HandleResetCloseInteract();
         }
 
+        if (inputManager.HasPressedSelect())
+        {
+            InventoryManager.Instance.SelectSlot(InventoryManager.Instance.highlightedSlot);
+        }
+
         playerMovement.HandleSpeed(inputManager.IsHoldingSprintInput());
     }
 
