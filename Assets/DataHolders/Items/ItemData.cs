@@ -9,6 +9,7 @@ public class ItemData : ScriptableObject
 
     public Sprite itemIcon;
     public Mesh itemMesh;
+    public Material itemMaterial;
 
     public void OnValidate()
     {

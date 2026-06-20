@@ -17,3 +17,4 @@ MonoBehaviour:
   itemID: ID_Stick
   itemIcon: {fileID: 21300000, guid: 412d4a560bb317446b55dad8536fb104, type: 3}
   itemMesh: {fileID: 5461320835613783329, guid: 80d0b81db94de6a4baca22b9934576a3, type: 3}
+  itemMaterial: {fileID: 2100000, guid: 3020dd59e5156b449905ef73832dd681, type: 2}
