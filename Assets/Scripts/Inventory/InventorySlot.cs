@@ -6,6 +6,9 @@ public class InventorySlot : MonoBehaviour
     Color startColor;
     Image image;
 
+    ItemData itemInSlot;
+    int amountInSlot;
+
     private void Awake()
     {
         image = GetComponent<Image>();
@@ -37,5 +40,24 @@ public class InventorySlot : MonoBehaviour
     {
         image.color = Color.green;
         InventoryManager.Instance.selectedSlot = this;
+
+        if (itemInSlot != null && amountInSlot >= itemInSlot.maxStack)
+        {
+            // do nothing
+        }
+        else
+        {
+            Place();
+        }
+    }
+
+    public void Pickup()
+    {
+
+    }
+
+    public void Place()
+    {
+
     }
 }

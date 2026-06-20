@@ -40,6 +40,7 @@ public class PlayerManager : MonoBehaviour
         if (inputManager.HasPressedSelect())
         {
             InventoryManager.Instance.SelectSlot(InventoryManager.Instance.highlightedSlot);
+            inputManager.HandleResetSelect();
         }
 
         playerMovement.HandleSpeed(inputManager.IsHoldingSprintInput());

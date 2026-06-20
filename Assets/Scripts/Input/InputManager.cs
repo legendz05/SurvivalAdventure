@@ -102,6 +102,7 @@ public class InputManager : MonoBehaviour
     public void HandleResetJump() => jumpInput = false;
     public void HandleResetInteract() => interactInput = false;
     public void HandleResetCloseInteract() => escapeInteractInput = false;
+    public void HandleResetSelect() => selectInput = false;
 
     public bool HasPressedInteract()
     { return interactInput; }

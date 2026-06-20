@@ -12,4 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9871b55e3b881449b2544d560f4df8c, type: 3}
   m_Name: Stick
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
-  itemName: 
+  itemName: Stick
+  maxStack: 64
+  itemID: ID_Stick
+  itemIcon: {fileID: 21300000, guid: 412d4a560bb317446b55dad8536fb104, type: 3}
+  itemMesh: {fileID: 5461320835613783329, guid: 80d0b81db94de6a4baca22b9934576a3, type: 3}

@@ -85,5 +85,6 @@ public class InventoryManager : MonoBehaviour
         if (slot == null) return;
 
         slot.OnSelect();
+        Debug.Log("Selected Slot");
     }
 }

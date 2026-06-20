@@ -4,4 +4,14 @@ using UnityEngine;
 public class ItemData : ScriptableObject
 {
     public string itemName;
+    public int maxStack;
+    public string itemID;
+
+    public Sprite itemIcon;
+    public Mesh itemMesh;
+
+    public void OnValidate()
+    {
+        itemID = "ID_" + itemName;
+    }
 }

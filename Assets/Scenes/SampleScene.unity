@@ -5846,9 +5846,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   inventoryOpen: 0
-  layerMask:
-    serializedVersion: 2
-    m_Bits: 32
+  highlightedSlot: {fileID: 0}
+  selectedSlot: {fileID: 0}
 --- !u!1001 &1903935340
 PrefabInstance:
   m_ObjectHideFlags: 0
