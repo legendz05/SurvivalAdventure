@@ -4,10 +4,12 @@ public class Interactable : MonoBehaviour
 {
     public bool isCurrentlyInteractingWith = false;
     protected InputManager inputManager;
+    protected PlayerAction action;
 
     public virtual void Awake()
     {
         inputManager = FindAnyObjectByType<InputManager>();
+        action = FindAnyObjectByType<PlayerAction>();
     }
 
     public virtual void Interact()

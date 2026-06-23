@@ -17,6 +17,9 @@ public class InventoryManager : MonoBehaviour
     public InventorySlot highlightedSlot;
     public InventorySlot selectedSlot;
 
+    public GameObject hotbar;
+    public GameObject inventory;
+
     private void Awake()
     {
         if (Instance == null)
@@ -29,12 +32,12 @@ public class InventoryManager : MonoBehaviour
         graphicRaycaster = GetComponentInParent<GraphicRaycaster>();
         eventSystem = EventSystem.current;
 
-        gameObject.SetActive(false);
+        inventory.SetActive(false);
     }
 
     public void OpenInventory()
     {
-        gameObject.SetActive(true);
+        inventory.SetActive(true);
         inputManager.EnableInventoryControls();
         inputManager.ToggleCursorVisibility(true);
         inventoryOpen = true;
@@ -44,7 +47,7 @@ public class InventoryManager : MonoBehaviour
     {
         inputManager.DisableInventoryControls();
         inputManager.ToggleCursorVisibility(false);
-        gameObject.SetActive(false);
+        inventory.SetActive(false);
         inventoryOpen = false;
     }
 

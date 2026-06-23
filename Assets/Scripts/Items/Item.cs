@@ -50,11 +50,16 @@ public class Item : Interactable
 
     public override void Interact()
     {
-        base.Interact();
-
         if (!isPickedUp)
         {
             isPickedUp = true;
+
+            if (action == null)
+                action = FindAnyObjectByType<PlayerAction>();
+
+            action.interactables.Remove(this);
+            action.FinishInteraction();
+
             gameObject.SetActive(false);
         }
     }

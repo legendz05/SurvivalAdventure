@@ -1,16 +1,38 @@
+using System.Collections;
 using UnityEngine;
 
-public class Lever : MonoBehaviour
+public class Lever : Interactable
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public int interactionTime = 2;
+
+    private Coroutine leverRoutine;
+
+    public override void Interact()
     {
-        
+        base.Interact();
+
+        gameObject.transform.localScale = Vector3.one * 5f;
+
+        if (leverRoutine != null)
+            StopCoroutine(leverRoutine);
+
+        leverRoutine = StartCoroutine(OnActionOver(interactionTime));
+
+        CloseInteraction();
+
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void CloseInteraction()
     {
-        
+        base.CloseInteraction();
+        action.FinishInteraction();
+    }
+
+    private IEnumerator OnActionOver(int delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        gameObject.transform.localScale = Vector3.one;
+        leverRoutine = null;
     }
 }

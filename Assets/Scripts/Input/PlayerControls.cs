@@ -305,6 +305,17 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""01b6b9a3-ea2f-4842-8d6c-3c5730dc6b90"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""CloseInventory"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""4bd51e79-c3eb-45ff-92db-6e42f32d692e"",
                     ""path"": ""<Mouse>/leftButton"",
                     ""interactions"": """",

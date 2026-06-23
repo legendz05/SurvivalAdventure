@@ -7,22 +7,35 @@ public class PlayerAction : MonoBehaviour
     public bool canInteract = false;
     public bool isInteracting = false;
 
+    private Interactable interactedWith;
+
     public void Interact()
     {
         if (!canInteract || isInteracting) return;
+        if (interactables.Count <= 0) return;
 
-        interactables[0].Interact();
-        Debug.Log($"Interacted with: {interactables[0].name}");
-
+        interactedWith = interactables[0];
         isInteracting = true;
+
+        Debug.Log($"Interacted with: {interactedWith.name}");
+
+        interactedWith.Interact();
     }
 
     public void CloseInteraction()
     {
         if (!isInteracting) return;
 
-        interactables[0].CloseInteraction();
+        interactedWith.CloseInteraction();
         isInteracting = false;
+
+        interactedWith = null;
+    }
+
+    public void FinishInteraction()
+    {
+        isInteracting = false;
+        interactedWith = null;
     }
 
     private void Update()
