@@ -4,10 +4,16 @@ using UnityEngine.UI;
 public class InventorySlot : MonoBehaviour
 {
     Color startColor;
+    Color iconColor;
     Image image;
 
-    ItemData itemInSlot;
-    int amountInSlot;
+    public Item itemInSlot;
+    public int amountInSlot;
+
+    public bool isHotbarSlot;
+
+    public Image slotIcon;
+    public Sprite itemSprite;
 
     private void Awake()
     {
@@ -17,6 +23,9 @@ public class InventorySlot : MonoBehaviour
     void Start()
     {
         startColor = image.color;
+        iconColor = slotIcon.color;
+
+        UpdateSlot(null);
     }
 
     void Update()
@@ -36,28 +45,32 @@ public class InventorySlot : MonoBehaviour
         }
     }
 
+    public void UpdateSlot(Item item)
+    {
+        itemInSlot = item;
+
+        if (item != null)
+        {
+            slotIcon.sprite = item.itemIcon;
+
+            Color color = slotIcon.color;
+            color.a = 1f;
+            slotIcon.color = color;
+        }
+        else
+        {
+            slotIcon.sprite = null;
+
+            Color color = slotIcon.color;
+            color.a = 0f;
+            slotIcon.color = color;
+        }
+    }
+
     public void OnSelect()
     {
         image.color = Color.green;
         InventoryManager.Instance.selectedSlot = this;
-
-        if (itemInSlot != null && amountInSlot >= itemInSlot.maxStack)
-        {
-            // do nothing
-        }
-        else
-        {
-            Place();
-        }
-    }
-
-    public void Pickup()
-    {
-
-    }
-
-    public void Place()
-    {
 
     }
 }

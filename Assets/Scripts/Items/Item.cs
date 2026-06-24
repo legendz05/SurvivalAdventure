@@ -60,6 +60,8 @@ public class Item : Interactable
             action.interactables.Remove(this);
             action.FinishInteraction();
 
+            InventoryManager.Instance.AddItem(this);
+
             gameObject.SetActive(false);
         }
     }

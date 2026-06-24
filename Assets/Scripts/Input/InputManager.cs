@@ -22,6 +22,8 @@ public class InputManager : MonoBehaviour
     public bool closeInventoryInput;
     public bool selectInput;
 
+    public int hotbarInput = -1;
+
     private void OnEnable()
     {
         if (playerControls == null)
@@ -50,6 +52,8 @@ public class InputManager : MonoBehaviour
 
             playerControls.Inventory.Select.performed += i => selectInput = i.ReadValueAsButton();
             playerControls.Inventory.Select.canceled += i => selectInput = i.ReadValueAsButton();
+
+            playerControls.PlayerAction.HotBar.performed += OnHotbarPressed;
         }
 
         playerControls.Enable();
@@ -97,6 +101,37 @@ public class InputManager : MonoBehaviour
     {
         verticalInput = movementInput.y;
         horizontalInput = movementInput.x;
+    }
+
+    private void OnHotbarPressed(InputAction.CallbackContext context)
+    {
+        string keyName = context.control.name;
+
+        switch (keyName)
+        {
+            case "1": hotbarInput = 0; break;
+            case "2": hotbarInput = 1; break;
+            case "3": hotbarInput = 2; break;
+            case "4": hotbarInput = 3; break;
+            case "5": hotbarInput = 4; break;
+            case "6": hotbarInput = 5; break;
+            case "7": hotbarInput = 6; break;
+            case "8": hotbarInput = 7; break;
+            case "9": hotbarInput = 8; break;
+        }
+    }
+
+    public bool TryGetHotbarInput(out int slotIndex)
+    {
+        if (hotbarInput >= 0)
+        {
+            slotIndex = hotbarInput;
+            hotbarInput = -1;
+            return true;
+        }
+
+        slotIndex = -1;
+        return false;
     }
 
     public void HandleResetJump() => jumpInput = false;

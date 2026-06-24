@@ -240,6 +240,7 @@ GameObject:
   - component: {fileID: 5411309381873605469}
   - component: {fileID: 4744769119428102581}
   - component: {fileID: 2642215169024119482}
+  - component: {fileID: 8816116808252343293}
   - component: {fileID: 2227803180168418944}
   - component: {fileID: 5144709919894862747}
   m_Layer: 6
@@ -278,12 +279,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e952484a1bd7bf844a37455010238304, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InputManager
+  camController: {fileID: 0}
   verticalInput: 0
   horizontalInput: 0
   jumpInput: 0
   interactInput: 0
   escapeInteractInput: 0
   sprintInput: 0
+  openInventoryInput: 0
+  closeInventoryInput: 0
+  selectInput: 0
+  hotbarInput: -1
 --- !u!114 &6540370768414375184
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -339,6 +345,18 @@ MonoBehaviour:
   interactables: []
   canInteract: 0
   isInteracting: 0
+--- !u!114 &8816116808252343293
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6261252180367692847}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76c0195ee6c48ad40806802fc548ca7d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
 --- !u!54 &2227803180168418944
 Rigidbody:
   m_ObjectHideFlags: 0
