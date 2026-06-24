@@ -12,6 +12,9 @@ public class InventoryManager : MonoBehaviour
     private GraphicRaycaster graphicRaycaster;
     private EventSystem eventSystem;
 
+    private Canvas canvas;
+    private RectTransform canvasRect;
+
     public bool inventoryOpen = false;
 
     public InventorySlot highlightedSlot;
@@ -26,8 +29,10 @@ public class InventoryManager : MonoBehaviour
     public Dictionary<Item, InventorySlot> inventory = new Dictionary<Item, InventorySlot>();
 
     private int hotbarSlot = -1;
+
     public Item pickedUpItem;
-    GameObject pickedItem;
+    private GameObject pickedItem;
+    private RectTransform pickedItemRect;
 
     private void Awake()
     {
@@ -41,15 +46,10 @@ public class InventoryManager : MonoBehaviour
         graphicRaycaster = GetComponentInParent<GraphicRaycaster>();
         eventSystem = EventSystem.current;
 
+        canvas = GetComponentInParent<Canvas>();
+        canvasRect = canvas.GetComponent<RectTransform>();
+
         inventoryObj.SetActive(false);
-    }
-
-    private void Stuff()
-    {
-        foreach (InventorySlot slot in inventorySlots)
-        {
-
-        }
     }
 
     public void OpenInventory()
@@ -66,6 +66,8 @@ public class InventoryManager : MonoBehaviour
         inputManager.ToggleCursorVisibility(false);
         inventoryObj.SetActive(false);
         inventoryOpen = false;
+
+        DestroyPickedItemIcon();
     }
 
     private void Update()
@@ -74,7 +76,7 @@ public class InventoryManager : MonoBehaviour
         {
             InventoryRayCast();
 
-            if (pickedUpItem != null)
+            if (pickedUpItem != null && pickedItem != null)
             {
                 ItemTrackMouse();
             }
@@ -86,36 +88,42 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
-    //Picked up item will track mouse position
+    // Picked up item follows mouse position inside the UI canvas
     private void ItemTrackMouse()
     {
-        PointerEventData pointerData = new PointerEventData(eventSystem);
-        pointerData.position = Mouse.current.position.ReadValue();
+        Vector2 mousePosition = Mouse.current.position.ReadValue();
 
-        pickedItem.transform.position = pointerData.position;
+        Camera uiCamera = canvas.renderMode == RenderMode.ScreenSpaceOverlay
+            ? null
+            : canvas.worldCamera;
+
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(
+            canvasRect,
+            mousePosition,
+            uiCamera,
+            out Vector2 localPoint
+        );
+
+        pickedItemRect.anchoredPosition = localPoint;
     }
 
-    // use mouse position to determine which slot is highlighted in the inventory
+    // Use mouse position to determine which slot is highlighted in the inventory
     private void InventoryRayCast()
     {
         PointerEventData pointerData = new PointerEventData(eventSystem);
         pointerData.position = Mouse.current.position.ReadValue();
 
         List<RaycastResult> results = new List<RaycastResult>();
-
         graphicRaycaster.Raycast(pointerData, results);
+
+        highlightedSlot = null;
 
         foreach (RaycastResult result in results)
         {
             if (result.gameObject.TryGetComponent(out InventorySlot slot))
             {
-                // Debug.Log("Slot");
                 highlightedSlot = slot;
                 return;
-            }
-            else
-            {
-                highlightedSlot = null;
             }
         }
     }
@@ -127,21 +135,52 @@ public class InventoryManager : MonoBehaviour
 
         slot.OnSelect();
 
-        if (slot.itemInSlot != null)
+        if (slot.itemInSlot != null && !pickedUpItem)
         {
             pickedUpItem = slot.itemInSlot;
-            CreateItemIconTracker(out pickedItem);
+
+            CreateItemIconTracker();
+
+            RemoveItem(pickedUpItem, slot);
+        }
+        else
+        {
+            AddItem(pickedUpItem, slot);
+            DestroyPickedItemIcon();
+            pickedUpItem = null;
         }
 
         Debug.Log("Selected Slot");
     }
 
-    private void CreateItemIconTracker(out GameObject pickedItem)
+    private void CreateItemIconTracker()
     {
-        GameObject pickedItemInstance = new GameObject();
-        pickedItemInstance.AddComponent<SpriteRenderer>().sprite = pickedUpItem.itemIcon;
+        DestroyPickedItemIcon();
 
-        pickedItem = pickedItemInstance;
+        pickedItem = new GameObject("Picked Up Item Icon");
+
+        pickedItem.transform.SetParent(canvas.transform, false);
+
+        pickedItemRect = pickedItem.AddComponent<RectTransform>();
+        pickedItemRect.sizeDelta = new Vector2(64f, 64f);
+
+        Image image = pickedItem.AddComponent<Image>();
+        image.sprite = pickedUpItem.itemIcon;
+        image.raycastTarget = false; // prevents dragged icon blocking slot raycasts
+
+        pickedItem.transform.SetAsLastSibling();
+
+        ItemTrackMouse();
+    }
+
+    private void DestroyPickedItemIcon()
+    {
+        if (pickedItem != null)
+        {
+            Destroy(pickedItem);
+            pickedItem = null;
+            pickedItemRect = null;
+        }
     }
 
     // Select a hotbar slot outside of inventory
@@ -151,31 +190,34 @@ public class InventoryManager : MonoBehaviour
             highlightedSlot = hotbarSlots[slot];
     }
 
-    // add an item to the inventory
+    // Add an item to the inventory
     public void AddItem(Item item, InventorySlot designatedSlot = null)
     {
-        // if no designated slot then pick first empty slot
-        if (designatedSlot == null)
-        {
-            foreach (InventorySlot hotbarSlot in hotbarSlots)
-            {
-                if (hotbarSlot.itemInSlot == null)
-                {
-                    hotbarSlot.UpdateSlot(item);
-                    return;
-                }
-            }
+        if (item == null) return;
 
-            foreach (InventorySlot inventorySlot in inventorySlots)
+        if (designatedSlot != null)
+        {
+            designatedSlot.UpdateSlot(item);
+            return;
+        }
+
+        foreach (InventorySlot hotbarSlot in hotbarSlots)
+        {
+            if (hotbarSlot.itemInSlot == null)
             {
-                if (inventorySlot.itemInSlot == null)
-                {
-                    inventorySlot.UpdateSlot(item);
-                    return;
-                }
+                hotbarSlot.UpdateSlot(item);
+                return;
             }
         }
 
+        foreach (InventorySlot inventorySlot in inventorySlots)
+        {
+            if (inventorySlot.itemInSlot == null)
+            {
+                inventorySlot.UpdateSlot(item);
+                return;
+            }
+        }
     }
 
     public void RemoveItem(Item item, InventorySlot slot)
@@ -183,6 +225,5 @@ public class InventoryManager : MonoBehaviour
         if (slot == null) return;
 
         slot.UpdateSlot(null);
-
     }
 }

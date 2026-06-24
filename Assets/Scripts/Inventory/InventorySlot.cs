@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,7 +14,8 @@ public class InventorySlot : MonoBehaviour
     public bool isHotbarSlot;
 
     public Image slotIcon;
-    public Sprite itemSprite;
+
+    private Coroutine selectRoutine;
 
     private void Awake()
     {
@@ -69,8 +71,20 @@ public class InventorySlot : MonoBehaviour
 
     public void OnSelect()
     {
-        image.color = Color.green;
         InventoryManager.Instance.selectedSlot = this;
 
+        if (selectRoutine != null)
+            selectRoutine = null;
+
+        selectRoutine = StartCoroutine(OnSelectRoutine());
+    }
+
+    private IEnumerator OnSelectRoutine()
+    {
+        image.color = Color.green;
+
+        yield return new WaitForSecondsRealtime(0.5f);
+
+        image.color = startColor;
     }
 }
