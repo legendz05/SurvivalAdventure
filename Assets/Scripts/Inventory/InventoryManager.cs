@@ -93,9 +93,7 @@ public class InventoryManager : MonoBehaviour
     {
         Vector2 mousePosition = Mouse.current.position.ReadValue();
 
-        Camera uiCamera = canvas.renderMode == RenderMode.ScreenSpaceOverlay
-            ? null
-            : canvas.worldCamera;
+        Camera uiCamera = canvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : canvas.worldCamera;
 
         RectTransformUtility.ScreenPointToLocalPointInRectangle(
             canvasRect,
@@ -153,6 +151,7 @@ public class InventoryManager : MonoBehaviour
         Debug.Log("Selected Slot");
     }
 
+    // Create an icon of a picked up item that tracks the mouse
     private void CreateItemIconTracker()
     {
         DestroyPickedItemIcon();

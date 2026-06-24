@@ -83,7 +83,7 @@ public class InventorySlot : MonoBehaviour
     {
         image.color = Color.green;
 
-        yield return new WaitForSecondsRealtime(0.5f);
+        yield return new WaitForSecondsRealtime(0.125f);
 
         image.color = startColor;
     }
