@@ -6467,6 +6467,7 @@ MonoBehaviour:
   - {fileID: 1870469154}
   - {fileID: 2113664859}
   - {fileID: 853110409}
+  pickupStack: 0
   pickedUpItem: {fileID: 0}
 --- !u!114 &1869154888 stripped
 MonoBehaviour:

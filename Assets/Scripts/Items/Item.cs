@@ -34,6 +34,7 @@ public class Item : MonoBehaviour
         maxStack = itemData.maxStack;
 
         meshCollider = gameObject.AddComponent<MeshCollider>();
+        meshCollider.convex = true;
 
         stackAmount = 1;
     }

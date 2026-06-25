@@ -30,6 +30,7 @@ public class InventoryManager : MonoBehaviour
 
     private int hotbarSlot = -1;
     int pickedAmount = 0;
+    [SerializeField] bool pickupStack = false;
 
     public Item pickedUpItem;
     private GameObject pickedItem;
@@ -51,6 +52,7 @@ public class InventoryManager : MonoBehaviour
         canvasRect = canvas.GetComponent<RectTransform>();
 
         inventoryObj.SetActive(false);
+        pickedAmount = 0;
     }
 
     public void OpenInventory()
@@ -127,6 +129,11 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
+    public void ToggleStackPickup(bool trueOrFalse)
+    {
+        pickupStack = trueOrFalse;
+    }
+
     // Select a slot in inventory screen
     public void SelectSlot(InventorySlot slot)
     {
@@ -137,17 +144,27 @@ public class InventoryManager : MonoBehaviour
         if (slot.itemInSlot != null && !pickedUpItem)
         {
             pickedUpItem = slot.itemInSlot;
-            pickedAmount = slot.amountInSlot;
+
+            if (pickupStack)
+            {
+                pickedAmount = slot.amountInSlot;
+            }
+            else
+            {
+                pickedAmount = Mathf.Clamp(pickedAmount + 1, 0, slot.amountInSlot);
+            }
+
 
             CreateItemIconTracker();
 
-            RemoveItem(pickedUpItem, slot);
+            RemoveItem(pickedUpItem, slot, pickedAmount);
         }
         else
         {
             AddItem(pickedUpItem, slot, pickedAmount);
             DestroyPickedItemIcon();
             pickedUpItem = null;
+            pickedAmount = 0;
         }
 
         Debug.Log("Selected Slot");
@@ -199,7 +216,7 @@ public class InventoryManager : MonoBehaviour
         // Designated slot
         if (designatedSlot != null)
         {
-            designatedSlot.UpdateSlot(item, amount);
+            designatedSlot.UpdateSlot(item, designatedSlot.amountInSlot + amount);
             return;
         }
 
@@ -208,7 +225,7 @@ public class InventoryManager : MonoBehaviour
         {
             if (hotbarSlot.itemInSlot != item)
             {
-                hotbarSlot.UpdateSlot(item, amount);
+                hotbarSlot.UpdateSlot(item, hotbarSlot.amountInSlot + amount);
                 return;
             }
         }
@@ -217,16 +234,41 @@ public class InventoryManager : MonoBehaviour
         {
             if (inventorySlot.itemInSlot != item)
             {
-                inventorySlot.UpdateSlot(item, amount);
+                inventorySlot.UpdateSlot(item, inventorySlot.amountInSlot + amount);
                 return;
             }
         }
     }
 
-    public void RemoveItem(Item item, InventorySlot slot)
+    public void DropItem()
+    {
+        if (highlightedSlot == null) return;
+
+        if (pickupStack)
+            RemoveItem(highlightedSlot.itemInSlot, highlightedSlot, highlightedSlot.amountInSlot);
+        else
+            RemoveItem(highlightedSlot.itemInSlot, highlightedSlot, 1);
+
+        ThrowItemOnGround(highlightedSlot.itemInSlot);
+    }
+
+    private void ThrowItemOnGround(Item item)
+    {
+        item.transform.position = inputManager.transform.position;
+        item.gameObject.SetActive(true);
+        item.TryGetComponent(out Rigidbody rb);
+        rb.AddForce(Vector3.forward * 5, ForceMode.Impulse);
+    }
+
+    public void RemoveItem(Item item, InventorySlot slot, int amount)
     {
         if (slot == null) return;
 
-        slot.UpdateSlot(null);
+        if (slot.amountInSlot - amount <= 0)
+        {
+            item = null;
+        }
+
+        slot.UpdateSlot(item, slot.amountInSlot - amount);
     }
 }

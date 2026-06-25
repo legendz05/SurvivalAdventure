@@ -54,6 +54,14 @@ public class InputManager : MonoBehaviour
             playerControls.Inventory.Select.canceled += i => selectInput = i.ReadValueAsButton();
 
             playerControls.PlayerAction.HotBar.performed += OnHotbarPressed;
+
+            playerControls.Inventory.PickupStack.performed += ToggleFullStackPickup;
+            playerControls.Inventory.PickupStack.canceled += ToggleFullStackPickup;
+            playerControls.PlayerAction.PickupStack.performed += ToggleFullStackPickup;
+            playerControls.PlayerAction.PickupStack.canceled += ToggleFullStackPickup;
+
+            playerControls.Inventory.Drop.performed += OnDrop;
+            playerControls.PlayerAction.Drop.performed += OnDrop;
         }
 
         playerControls.Enable();
@@ -132,6 +140,16 @@ public class InputManager : MonoBehaviour
 
         slotIndex = -1;
         return false;
+    }
+
+    private void ToggleFullStackPickup(InputAction.CallbackContext ctx)
+    {
+        InventoryManager.Instance.ToggleStackPickup(ctx.ReadValueAsButton());
+    }
+
+    private void OnDrop(InputAction.CallbackContext ctx)
+    {
+        InventoryManager.Instance.DropItem();
     }
 
     public void HandleResetJump() => jumpInput = false;

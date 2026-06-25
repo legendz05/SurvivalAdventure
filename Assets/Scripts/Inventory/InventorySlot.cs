@@ -52,6 +52,7 @@ public class InventorySlot : MonoBehaviour
     public void UpdateSlot(Item item, int amount = 0)
     {
         itemInSlot = item;
+        amountInSlot = amount;
 
         if (item != null)
         {
@@ -61,7 +62,6 @@ public class InventorySlot : MonoBehaviour
             color.a = 1f;
             slotIcon.color = color;
 
-            amountInSlot += amount;
         }
         else
         {
@@ -70,10 +70,9 @@ public class InventorySlot : MonoBehaviour
             Color color = slotIcon.color;
             color.a = 0f;
             slotIcon.color = color;
-            amountInSlot = 0;
         }
 
-        amountText.text = amountInSlot.ToString();
+        amountText.text = amountInSlot > 0 ? amountInSlot.ToString() : "";
     }
 
     public void OnSelect()

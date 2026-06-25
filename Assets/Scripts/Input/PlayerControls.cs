@@ -214,6 +214,24 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
+                    ""name"": ""PickupStack"",
+                    ""type"": ""Button"",
+                    ""id"": ""e7ed135e-d89b-441b-9751-6dae918c0512"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Drop"",
+                    ""type"": ""Button"",
+                    ""id"": ""9c50e28b-230a-4fa6-a99e-cc64e2b43b21"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
                     ""name"": ""CloseInteraction"",
                     ""type"": ""Button"",
                     ""id"": ""689eb858-096e-4e77-a1ee-616508f7ab7c"",
@@ -250,6 +268,28 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6600fed2-ff3d-45aa-816e-42886efcb618"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PickupStack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c163aba7-987f-48e5-9d11-2fc3e1da4d8b"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Drop"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -397,6 +437,24 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""PickupStack"",
+                    ""type"": ""Button"",
+                    ""id"": ""37c79ca8-bd9a-49cb-8f63-5c53dfd42dfe"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Drop"",
+                    ""type"": ""Button"",
+                    ""id"": ""6a53f9d5-ae25-4bb9-8999-31b4a5f4ddb4"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -432,6 +490,28 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""action"": ""Select"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""65b1e412-d96e-4acc-b0a3-bb399a408e62"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PickupStack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""221d4016-6410-48c1-a434-27ecc8c9d07a"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Drop"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -446,6 +526,8 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         // PlayerAction
         m_PlayerAction = asset.FindActionMap("PlayerAction", throwIfNotFound: true);
         m_PlayerAction_Interact = m_PlayerAction.FindAction("Interact", throwIfNotFound: true);
+        m_PlayerAction_PickupStack = m_PlayerAction.FindAction("PickupStack", throwIfNotFound: true);
+        m_PlayerAction_Drop = m_PlayerAction.FindAction("Drop", throwIfNotFound: true);
         m_PlayerAction_CloseInteraction = m_PlayerAction.FindAction("CloseInteraction", throwIfNotFound: true);
         m_PlayerAction_OpenInventory = m_PlayerAction.FindAction("OpenInventory", throwIfNotFound: true);
         m_PlayerAction_HotBar = m_PlayerAction.FindAction("HotBar", throwIfNotFound: true);
@@ -453,6 +535,8 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_Inventory = asset.FindActionMap("Inventory", throwIfNotFound: true);
         m_Inventory_CloseInventory = m_Inventory.FindAction("CloseInventory", throwIfNotFound: true);
         m_Inventory_Select = m_Inventory.FindAction("Select", throwIfNotFound: true);
+        m_Inventory_PickupStack = m_Inventory.FindAction("PickupStack", throwIfNotFound: true);
+        m_Inventory_Drop = m_Inventory.FindAction("Drop", throwIfNotFound: true);
     }
 
     ~@PlayerControls()
@@ -654,6 +738,8 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_PlayerAction;
     private List<IPlayerActionActions> m_PlayerActionActionsCallbackInterfaces = new List<IPlayerActionActions>();
     private readonly InputAction m_PlayerAction_Interact;
+    private readonly InputAction m_PlayerAction_PickupStack;
+    private readonly InputAction m_PlayerAction_Drop;
     private readonly InputAction m_PlayerAction_CloseInteraction;
     private readonly InputAction m_PlayerAction_OpenInventory;
     private readonly InputAction m_PlayerAction_HotBar;
@@ -672,6 +758,14 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "PlayerAction/Interact".
         /// </summary>
         public InputAction @Interact => m_Wrapper.m_PlayerAction_Interact;
+        /// <summary>
+        /// Provides access to the underlying input action "PlayerAction/PickupStack".
+        /// </summary>
+        public InputAction @PickupStack => m_Wrapper.m_PlayerAction_PickupStack;
+        /// <summary>
+        /// Provides access to the underlying input action "PlayerAction/Drop".
+        /// </summary>
+        public InputAction @Drop => m_Wrapper.m_PlayerAction_Drop;
         /// <summary>
         /// Provides access to the underlying input action "PlayerAction/CloseInteraction".
         /// </summary>
@@ -713,6 +807,12 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Interact.started += instance.OnInteract;
             @Interact.performed += instance.OnInteract;
             @Interact.canceled += instance.OnInteract;
+            @PickupStack.started += instance.OnPickupStack;
+            @PickupStack.performed += instance.OnPickupStack;
+            @PickupStack.canceled += instance.OnPickupStack;
+            @Drop.started += instance.OnDrop;
+            @Drop.performed += instance.OnDrop;
+            @Drop.canceled += instance.OnDrop;
             @CloseInteraction.started += instance.OnCloseInteraction;
             @CloseInteraction.performed += instance.OnCloseInteraction;
             @CloseInteraction.canceled += instance.OnCloseInteraction;
@@ -736,6 +836,12 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Interact.started -= instance.OnInteract;
             @Interact.performed -= instance.OnInteract;
             @Interact.canceled -= instance.OnInteract;
+            @PickupStack.started -= instance.OnPickupStack;
+            @PickupStack.performed -= instance.OnPickupStack;
+            @PickupStack.canceled -= instance.OnPickupStack;
+            @Drop.started -= instance.OnDrop;
+            @Drop.performed -= instance.OnDrop;
+            @Drop.canceled -= instance.OnDrop;
             @CloseInteraction.started -= instance.OnCloseInteraction;
             @CloseInteraction.performed -= instance.OnCloseInteraction;
             @CloseInteraction.canceled -= instance.OnCloseInteraction;
@@ -784,6 +890,8 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private List<IInventoryActions> m_InventoryActionsCallbackInterfaces = new List<IInventoryActions>();
     private readonly InputAction m_Inventory_CloseInventory;
     private readonly InputAction m_Inventory_Select;
+    private readonly InputAction m_Inventory_PickupStack;
+    private readonly InputAction m_Inventory_Drop;
     /// <summary>
     /// Provides access to input actions defined in input action map "Inventory".
     /// </summary>
@@ -803,6 +911,14 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Inventory/Select".
         /// </summary>
         public InputAction @Select => m_Wrapper.m_Inventory_Select;
+        /// <summary>
+        /// Provides access to the underlying input action "Inventory/PickupStack".
+        /// </summary>
+        public InputAction @PickupStack => m_Wrapper.m_Inventory_PickupStack;
+        /// <summary>
+        /// Provides access to the underlying input action "Inventory/Drop".
+        /// </summary>
+        public InputAction @Drop => m_Wrapper.m_Inventory_Drop;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -835,6 +951,12 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Select.started += instance.OnSelect;
             @Select.performed += instance.OnSelect;
             @Select.canceled += instance.OnSelect;
+            @PickupStack.started += instance.OnPickupStack;
+            @PickupStack.performed += instance.OnPickupStack;
+            @PickupStack.canceled += instance.OnPickupStack;
+            @Drop.started += instance.OnDrop;
+            @Drop.performed += instance.OnDrop;
+            @Drop.canceled += instance.OnDrop;
         }
 
         /// <summary>
@@ -852,6 +974,12 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Select.started -= instance.OnSelect;
             @Select.performed -= instance.OnSelect;
             @Select.canceled -= instance.OnSelect;
+            @PickupStack.started -= instance.OnPickupStack;
+            @PickupStack.performed -= instance.OnPickupStack;
+            @PickupStack.canceled -= instance.OnPickupStack;
+            @Drop.started -= instance.OnDrop;
+            @Drop.performed -= instance.OnDrop;
+            @Drop.canceled -= instance.OnDrop;
         }
 
         /// <summary>
@@ -929,6 +1057,20 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnInteract(InputAction.CallbackContext context);
         /// <summary>
+        /// Method invoked when associated input action "PickupStack" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnPickupStack(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Drop" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnDrop(InputAction.CallbackContext context);
+        /// <summary>
         /// Method invoked when associated input action "CloseInteraction" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
@@ -971,5 +1113,19 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnSelect(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "PickupStack" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnPickupStack(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Drop" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnDrop(InputAction.CallbackContext context);
     }
 }
