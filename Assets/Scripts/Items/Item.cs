@@ -1,7 +1,7 @@
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class Item : Interactable
+public class Item : MonoBehaviour
 {
     public ItemData itemData;
 
@@ -13,8 +13,9 @@ public class Item : Interactable
     MeshCollider meshCollider;
 
     public bool isPickedUp = false;
+    public int stackAmount;
 
-    public override void Awake()
+    public void Awake()
     {
         GenerateItem();
     }
@@ -33,6 +34,8 @@ public class Item : Interactable
         maxStack = itemData.maxStack;
 
         meshCollider = gameObject.AddComponent<MeshCollider>();
+
+        stackAmount = 1;
     }
 
     private void Update()
@@ -48,19 +51,13 @@ public class Item : Interactable
         }
     }
 
-    public override void Interact()
+    public void Interact()
     {
         if (!isPickedUp)
         {
             isPickedUp = true;
 
-            if (action == null)
-                action = FindAnyObjectByType<PlayerAction>();
-
-            action.interactables.Remove(this);
-            action.FinishInteraction();
-
-            InventoryManager.Instance.AddItem(this);
+            InventoryManager.Instance.AddItem(this, null, stackAmount);
 
             gameObject.SetActive(false);
         }

@@ -29,6 +29,7 @@ public class InventoryManager : MonoBehaviour
     public Dictionary<Item, InventorySlot> inventory = new Dictionary<Item, InventorySlot>();
 
     private int hotbarSlot = -1;
+    int pickedAmount = 0;
 
     public Item pickedUpItem;
     private GameObject pickedItem;
@@ -136,6 +137,7 @@ public class InventoryManager : MonoBehaviour
         if (slot.itemInSlot != null && !pickedUpItem)
         {
             pickedUpItem = slot.itemInSlot;
+            pickedAmount = slot.amountInSlot;
 
             CreateItemIconTracker();
 
@@ -143,7 +145,7 @@ public class InventoryManager : MonoBehaviour
         }
         else
         {
-            AddItem(pickedUpItem, slot);
+            AddItem(pickedUpItem, slot, pickedAmount);
             DestroyPickedItemIcon();
             pickedUpItem = null;
         }
@@ -190,30 +192,32 @@ public class InventoryManager : MonoBehaviour
     }
 
     // Add an item to the inventory
-    public void AddItem(Item item, InventorySlot designatedSlot = null)
+    public void AddItem(Item item, InventorySlot designatedSlot = null, int amount = 0)
     {
         if (item == null) return;
 
+        // Designated slot
         if (designatedSlot != null)
         {
-            designatedSlot.UpdateSlot(item);
+            designatedSlot.UpdateSlot(item, amount);
             return;
         }
 
+        // Automatic slot
         foreach (InventorySlot hotbarSlot in hotbarSlots)
         {
-            if (hotbarSlot.itemInSlot == null)
+            if (hotbarSlot.itemInSlot != item)
             {
-                hotbarSlot.UpdateSlot(item);
+                hotbarSlot.UpdateSlot(item, amount);
                 return;
             }
         }
 
         foreach (InventorySlot inventorySlot in inventorySlots)
         {
-            if (inventorySlot.itemInSlot == null)
+            if (inventorySlot.itemInSlot != item)
             {
-                inventorySlot.UpdateSlot(item);
+                inventorySlot.UpdateSlot(item, amount);
                 return;
             }
         }

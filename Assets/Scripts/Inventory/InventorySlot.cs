@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class InventorySlot : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class InventorySlot : MonoBehaviour
 
     public Item itemInSlot;
     public int amountInSlot;
+    public TextMeshProUGUI amountText;
 
     public bool isHotbarSlot;
 
@@ -47,7 +49,7 @@ public class InventorySlot : MonoBehaviour
         }
     }
 
-    public void UpdateSlot(Item item)
+    public void UpdateSlot(Item item, int amount = 0)
     {
         itemInSlot = item;
 
@@ -58,6 +60,8 @@ public class InventorySlot : MonoBehaviour
             Color color = slotIcon.color;
             color.a = 1f;
             slotIcon.color = color;
+
+            amountInSlot += amount;
         }
         else
         {
@@ -66,7 +70,10 @@ public class InventorySlot : MonoBehaviour
             Color color = slotIcon.color;
             color.a = 0f;
             slotIcon.color = color;
+            amountInSlot = 0;
         }
+
+        amountText.text = amountInSlot.ToString();
     }
 
     public void OnSelect()

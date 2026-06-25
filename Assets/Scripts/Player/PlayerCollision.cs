@@ -36,6 +36,11 @@ public class PlayerCollision : MonoBehaviour
             interactable.TryGetComponent(out MeshRenderer renderer);
             renderer.material.color = Color.green;
         }
+
+        if (other.gameObject.TryGetComponent(out Item item))
+        {
+            item.Interact();
+        }
     }
 
     private void OnTriggerExit(Collider other)
