@@ -1,4 +1,4 @@
-using Unity.VisualScripting;
+using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 
 public class Item : MonoBehaviour
@@ -8,59 +8,72 @@ public class Item : MonoBehaviour
     public Sprite itemIcon { get; private set; }
     public int maxStack { get; private set; }
 
-    MeshRenderer meshRenderer;
-    MeshFilter meshFilter;
-    MeshCollider meshCollider;
+    private MeshRenderer meshRenderer;
+    private MeshFilter meshFilter;
+    private MeshCollider meshCollider;
 
     public bool isPickedUp = false;
-    public int stackAmount;
+    public int stackAmount = 1;
 
-    public void Awake()
+    private float pickupAllowedTime;
+
+    private void Awake()
     {
-        GenerateItem();
+        meshRenderer = GetComponent<MeshRenderer>();
+        meshFilter = GetComponent<MeshFilter>();
+        meshCollider = GetComponent<MeshCollider>();
+
+        if (meshCollider == null)
+            meshCollider = gameObject.AddComponent<MeshCollider>();
+
+        if (itemData != null)
+            Initialize(itemData, stackAmount);
     }
 
-    private void GenerateItem()
+    public void Initialize(ItemData data, int amount = 1, float pickupDelayTime = 0f)
     {
+        itemData = data;
+
         if (itemData == null)
             return;
 
-        meshRenderer = GetComponent<MeshRenderer>();
-        meshFilter = GetComponent<MeshFilter>();
-
         meshFilter.mesh = itemData.itemMesh;
         meshRenderer.material = itemData.itemMaterial;
+
+        meshCollider.sharedMesh = itemData.itemMesh;
+        meshCollider.convex = true;
+        meshCollider.enabled = true;
+
         itemIcon = itemData.itemIcon;
         maxStack = itemData.maxStack;
 
-        meshCollider = gameObject.AddComponent<MeshCollider>();
-        meshCollider.convex = true;
+        stackAmount = Mathf.Max(1, amount);
+        isPickedUp = false;
 
-        stackAmount = 1;
+        pickupAllowedTime = Time.time + pickupDelayTime;
     }
 
     private void Update()
     {
         if (!isPickedUp)
         {
-            //meshCollider.enabled = false;
             transform.Rotate(Vector3.up, 10f * Time.deltaTime);
-        }
-        else
-        {
-            meshCollider.enabled = true;
         }
     }
 
     public void Interact()
     {
-        if (!isPickedUp)
+        if (isPickedUp) return;
+
+        if (Time.time < pickupAllowedTime)
+            return;
+
+        bool added = InventoryManager.Instance.AddItem(itemData, null, stackAmount);
+
+        if (added)
         {
             isPickedUp = true;
-
-            InventoryManager.Instance.AddItem(this, null, stackAmount);
-
-            gameObject.SetActive(false);
+            Destroy(gameObject);
         }
     }
 }

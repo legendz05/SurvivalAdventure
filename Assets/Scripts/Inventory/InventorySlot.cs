@@ -9,7 +9,7 @@ public class InventorySlot : MonoBehaviour
     Color iconColor;
     Image image;
 
-    public Item itemInSlot;
+    public ItemData itemInSlot;
     public int amountInSlot;
     public TextMeshProUGUI amountText;
 
@@ -49,22 +49,24 @@ public class InventorySlot : MonoBehaviour
         }
     }
 
-    public void UpdateSlot(Item item, int amount = 0)
+    public void UpdateSlot(ItemData item, int amount = 0)
     {
         itemInSlot = item;
         amountInSlot = amount;
 
-        if (item != null)
+        if (item != null && amount > 0)
         {
             slotIcon.sprite = item.itemIcon;
 
             Color color = slotIcon.color;
             color.a = 1f;
             slotIcon.color = color;
-
         }
         else
         {
+            itemInSlot = null;
+            amountInSlot = 0;
+
             slotIcon.sprite = null;
 
             Color color = slotIcon.color;
@@ -72,7 +74,7 @@ public class InventorySlot : MonoBehaviour
             slotIcon.color = color;
         }
 
-        amountText.text = amountInSlot > 0 ? amountInSlot.ToString() : "";
+        amountText.text = amountInSlot > 1 ? amountInSlot.ToString() : "";
     }
 
     public void OnSelect()

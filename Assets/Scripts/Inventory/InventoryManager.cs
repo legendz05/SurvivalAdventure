@@ -11,6 +11,7 @@ public class InventoryManager : MonoBehaviour
     private InputManager inputManager;
     private GraphicRaycaster graphicRaycaster;
     private EventSystem eventSystem;
+    [SerializeField] private Item worldItemPrefab;
 
     private Canvas canvas;
     private RectTransform canvasRect;
@@ -32,7 +33,7 @@ public class InventoryManager : MonoBehaviour
     int pickedAmount = 0;
     [SerializeField] bool pickupStack = false;
 
-    public Item pickedUpItem;
+    public ItemData pickedUpItem;
     private GameObject pickedItem;
     private RectTransform pickedItemRect;
 
@@ -157,7 +158,7 @@ public class InventoryManager : MonoBehaviour
 
             CreateItemIconTracker();
 
-            RemoveItem(pickedUpItem, slot, pickedAmount);
+            RemoveItem(slot, pickedAmount);
         }
         else
         {
@@ -209,66 +210,163 @@ public class InventoryManager : MonoBehaviour
     }
 
     // Add an item to the inventory
-    public void AddItem(Item item, InventorySlot designatedSlot = null, int amount = 0)
+    public bool AddItem(ItemData item, InventorySlot designatedSlot = null, int amount = 1)
     {
-        if (item == null) return;
+        if (item == null || amount <= 0)
+            return false;
 
-        // Designated slot
+        // If placing into a specific slot
         if (designatedSlot != null)
         {
-            designatedSlot.UpdateSlot(item, designatedSlot.amountInSlot + amount);
-            return;
+            // Empty slot
+            if (designatedSlot.itemInSlot == null)
+            {
+                int amountToAdd = item.maxStack > 1 ? Mathf.Min(item.maxStack, amount) : 1;
+
+                designatedSlot.UpdateSlot(item, amountToAdd);
+                return amountToAdd == amount;
+            }
+
+            // Same item, stack it
+            if (designatedSlot.itemInSlot == item)
+            {
+                int spaceLeft = item.maxStack - designatedSlot.amountInSlot;
+                int amountToAdd = Mathf.Min(spaceLeft, amount);
+
+                if (amountToAdd <= 0)
+                    return false;
+
+                designatedSlot.UpdateSlot(item, designatedSlot.amountInSlot + amountToAdd);
+                return amountToAdd == amount;
+            }
+
+            // Different item in slot
+            return false;
         }
 
-        // Automatic slot
-        foreach (InventorySlot hotbarSlot in hotbarSlots)
+        // First: stack into existing hotbar slots
+        foreach (InventorySlot slot in hotbarSlots)
         {
-            if (hotbarSlot.itemInSlot != item)
+            if (slot.itemInSlot == item)
             {
-                hotbarSlot.UpdateSlot(item, hotbarSlot.amountInSlot + amount);
-                return;
+                int spaceLeft = item.maxStack - slot.amountInSlot;
+                int amountToAdd = Mathf.Min(spaceLeft, amount);
+
+                if (amountToAdd <= 0)
+                    continue;
+
+                slot.UpdateSlot(item, slot.amountInSlot + amountToAdd);
+                amount -= amountToAdd;
+
+                if (amount <= 0)
+                    return true;
             }
         }
 
-        foreach (InventorySlot inventorySlot in inventorySlots)
+        // Then: stack into existing inventory slots
+        foreach (InventorySlot slot in inventorySlots)
         {
-            if (inventorySlot.itemInSlot != item)
+            if (slot.itemInSlot == item)
             {
-                inventorySlot.UpdateSlot(item, inventorySlot.amountInSlot + amount);
-                return;
+                int spaceLeft = item.maxStack - slot.amountInSlot;
+                int amountToAdd = Mathf.Min(spaceLeft, amount);
+
+                if (amountToAdd <= 0)
+                    continue;
+
+                slot.UpdateSlot(item, slot.amountInSlot + amountToAdd);
+                amount -= amountToAdd;
+
+                if (amount <= 0)
+                    return true;
             }
         }
+
+        // Then: empty hotbar slots
+        foreach (InventorySlot slot in hotbarSlots)
+        {
+            if (slot.itemInSlot == null)
+            {
+                int amountToAdd = item.maxStack > 1 ? Mathf.Min(item.maxStack, amount) : 1;
+
+                slot.UpdateSlot(item, amountToAdd);
+                amount -= amountToAdd;
+
+                if (amount <= 0)
+                    return true;
+            }
+        }
+
+        // Then: empty inventory slots
+        foreach (InventorySlot slot in inventorySlots)
+        {
+            if (slot.itemInSlot == null)
+            {
+                int amountToAdd = item.maxStack > 1 ? Mathf.Min(item.maxStack, amount) : 1;
+
+                slot.UpdateSlot(item, amountToAdd);
+                amount -= amountToAdd;
+
+                if (amount <= 0)
+                    return true;
+            }
+        }
+
+        return false;
     }
 
     public void DropItem()
     {
         if (highlightedSlot == null) return;
+        if (highlightedSlot.itemInSlot == null) return;
 
-        if (pickupStack)
-            RemoveItem(highlightedSlot.itemInSlot, highlightedSlot, highlightedSlot.amountInSlot);
-        else
-            RemoveItem(highlightedSlot.itemInSlot, highlightedSlot, 1);
+        ItemData itemToDrop = highlightedSlot.itemInSlot;
 
-        ThrowItemOnGround(highlightedSlot.itemInSlot);
+        int amountToDrop = pickupStack ? highlightedSlot.amountInSlot : 1;
+
+        amountToDrop = Mathf.Clamp(amountToDrop, 1, highlightedSlot.amountInSlot);
+
+        RemoveItem(highlightedSlot, amountToDrop);
+
+        ThrowItemOnGround(itemToDrop, amountToDrop);
     }
 
-    private void ThrowItemOnGround(Item item)
+    private void ThrowItemOnGround(ItemData itemData, int amount)
     {
-        item.transform.position = inputManager.transform.position;
-        item.gameObject.SetActive(true);
-        item.TryGetComponent(out Rigidbody rb);
-        rb.AddForce(Vector3.forward * 5, ForceMode.Impulse);
+        if (itemData == null) return;
+        if (worldItemPrefab == null) return;
+
+        Vector3 spawnPosition = inputManager.transform.position + inputManager.transform.forward * 1.25f;
+
+        Item droppedItem = Instantiate(
+            worldItemPrefab,
+            spawnPosition,
+            Quaternion.identity
+        );
+
+        droppedItem.Initialize(itemData, amount, 2f);
+
+        if (droppedItem.TryGetComponent(out Rigidbody rb))
+        {
+            rb.AddForce(inputManager.transform.forward * 5f, ForceMode.Impulse);
+        }
     }
 
-    public void RemoveItem(Item item, InventorySlot slot, int amount)
+    public void RemoveItem(InventorySlot slot, int amount)
     {
         if (slot == null) return;
+        if (slot.itemInSlot == null) return;
+        if (amount <= 0) return;
 
-        if (slot.amountInSlot - amount <= 0)
+        int newAmount = slot.amountInSlot - amount;
+
+        if (newAmount <= 0)
         {
-            item = null;
+            slot.UpdateSlot(null, 0);
         }
-
-        slot.UpdateSlot(item, slot.amountInSlot - amount);
+        else
+        {
+            slot.UpdateSlot(slot.itemInSlot, newAmount);
+        }
     }
 }
