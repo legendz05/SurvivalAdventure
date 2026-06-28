@@ -40,9 +40,15 @@ public class PlayerMovement : MonoBehaviour
         //Debug.Log(isSprinting);
 
         if (isSprinting)
+        {
             movementSpeed = sprintSpeed;
+            AnimationManager.SetBool(gameObject.transform.GetChild(0).gameObject, "isRunning", isSprinting);
+        }
         else
+        {
             movementSpeed = oldSpeed;
+            AnimationManager.SetBool(gameObject.transform.GetChild(0).gameObject, "isRunning", isSprinting);
+        }
 
     }
 

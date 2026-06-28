@@ -23,7 +23,7 @@ public class PlayerManager : MonoBehaviour
         if (inputManager.closeInventoryInput && InventoryManager.Instance.inventoryOpen)
             InventoryManager.Instance.CloseInventory();
 
-        inputManager.HandleMovementInput();
+        HandlePlayerMovement();
 
         if (inputManager.HasPressedInteract())
         {
@@ -42,8 +42,6 @@ public class PlayerManager : MonoBehaviour
             InventoryManager.Instance.SelectSlot(InventoryManager.Instance.highlightedSlot);
             inputManager.HandleResetSelect();
         }
-
-        playerMovement.HandleSpeed(inputManager.IsHoldingSprintInput());
     }
 
     private void FixedUpdate()
@@ -55,5 +53,16 @@ public class PlayerManager : MonoBehaviour
             playerMovement.HandleJump();
             inputManager.HandleResetJump();
         }
+    }
+
+    private void HandlePlayerMovement()
+    {
+        inputManager.HandleMovementInput();
+
+        bool isMoving = Mathf.Abs(inputManager.horizontalInput) > 0.1f || Mathf.Abs(inputManager.verticalInput) > 0.1f;
+
+        AnimationManager.SetBool(gameObject.transform.GetChild(0).gameObject, "isWalking", isMoving);
+
+        playerMovement.HandleSpeed(inputManager.IsHoldingSprintInput());
     }
 }

@@ -1,3 +1,4 @@
+using NUnit.Framework.Interfaces;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -10,6 +11,7 @@ public class InventoryManager : MonoBehaviour
 
     private InputManager inputManager;
     private GraphicRaycaster graphicRaycaster;
+    private PlayerEquipment playerEquipment;
     private EventSystem eventSystem;
     [SerializeField] private Item worldItemPrefab;
 
@@ -51,6 +53,8 @@ public class InventoryManager : MonoBehaviour
 
         canvas = GetComponentInParent<Canvas>();
         canvasRect = canvas.GetComponent<RectTransform>();
+
+        playerEquipment = FindAnyObjectByType<PlayerEquipment>();
 
         inventoryObj.SetActive(false);
         pickedAmount = 0;
@@ -207,6 +211,11 @@ public class InventoryManager : MonoBehaviour
     {
         if (slot >= 0 && slot < hotbarSlots.Count)
             highlightedSlot = hotbarSlots[slot];
+
+        if (playerEquipment != null)
+        {
+            // playerEquipment.EquipToRightHand();
+        }
     }
 
     // Add an item to the inventory
