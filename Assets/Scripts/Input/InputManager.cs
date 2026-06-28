@@ -8,6 +8,7 @@ public class InputManager : MonoBehaviour
 {
     public CinemachineInputAxisController camController;
     private PlayerControls playerControls;
+    private PlayerAttack playerAttack;
 
     private Vector2 movementInput;
 
@@ -62,6 +63,8 @@ public class InputManager : MonoBehaviour
 
             playerControls.Inventory.Drop.performed += OnDrop;
             playerControls.PlayerAction.Drop.performed += OnDrop;
+
+            playerControls.PlayerAction.Attack.performed += LightAttack;
         }
 
         playerControls.Enable();
@@ -150,6 +153,14 @@ public class InputManager : MonoBehaviour
     private void OnDrop(InputAction.CallbackContext ctx)
     {
         InventoryManager.Instance.DropItem();
+    }
+
+    private void LightAttack(InputAction.CallbackContext ctx)
+    {
+        if (playerAttack == null)
+            playerAttack = GetComponent<PlayerAttack>();
+
+        playerAttack.LightAttack();
     }
 
     public void HandleResetJump() => jumpInput = false;

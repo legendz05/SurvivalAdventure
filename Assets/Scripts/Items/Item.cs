@@ -75,17 +75,14 @@ public class Item : MonoBehaviour
         maxStack = itemData.maxStack;
         stackAmount = 1;
 
-        // It is equipped now, not a world pickup.
         isPickedUp = true;
         isFloating = false;
 
-        // Disable all colliders on the equipped visual.
         foreach (Collider col in GetComponentsInChildren<Collider>())
         {
             col.enabled = false;
         }
 
-        // Do not let physics control something parented to an animated hand.
         if (rb != null)
         {
             Destroy(rb);

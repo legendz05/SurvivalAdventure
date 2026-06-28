@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerEquipment : MonoBehaviour
@@ -49,7 +50,7 @@ public class PlayerEquipment : MonoBehaviour
 
         equippedItem.InitializeEquippedItem(itemData);
 
-        equippedItem.transform.localPosition = Vector3.zero;
+        equippedItem.transform.localPosition = new Vector3(-1, 0, 0);
         equippedItem.transform.localRotation = Quaternion.identity;
         equippedItem.transform.localScale = Vector3.one;
 
