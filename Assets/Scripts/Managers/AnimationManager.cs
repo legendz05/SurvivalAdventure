@@ -10,12 +10,12 @@ public class AnimationManager : MonoBehaviour
         return true;
     }
 
-    public static void PlayAnimation(GameObject gameObject, string animationName)
+    public static void PlayAnimation(GameObject gameObject, string animationName, int layer = 0)
     {
         if (!VerifyAnimatorComponents(gameObject)) return;
 
         Animator animator = gameObject.GetComponent<Animator>();
-        animator.Play(animationName, 0);
+        animator.Play(animationName, layer);
     }
 
     public static void ActivateTrigger(GameObject gameObject, string triggerName)
@@ -43,5 +43,14 @@ public class AnimationManager : MonoBehaviour
 
         Animator animator = gameObject.GetComponent<Animator>();
         animator.SetFloat(floatName, value);
+    }
+
+    public static void ChangeLayerWeight(GameObject gameObject, int layerIDX, float weightValue)
+    {
+        if (!VerifyAnimatorComponents(gameObject)) return;
+
+        Animator animator = gameObject.GetComponent<Animator>();
+
+        animator.SetLayerWeight(layerIDX, weightValue);
     }
 }
