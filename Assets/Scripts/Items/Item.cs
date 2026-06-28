@@ -65,15 +65,19 @@ public class Item : MonoBehaviour
     public void InitializeEquippedItem(ItemData data)
     {
         itemData = data;
-
-        if (itemData == null)
-            return;
+        if (itemData == null) return;
 
         meshFilter.mesh = itemData.itemMesh;
         meshRenderer.material = itemData.itemMaterial;
 
         boxCollider.enabled = true;
         boxCollider.isTrigger = true;
+
+        if (rb != null)
+        {
+            rb.isKinematic = true;
+            rb.useGravity = false;
+        }
 
         itemIcon = itemData.itemIcon;
         maxStack = itemData.maxStack;

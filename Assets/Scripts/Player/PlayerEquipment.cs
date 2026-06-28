@@ -24,26 +24,21 @@ public class PlayerEquipment : MonoBehaviour
             Debug.LogError("Right hand bone not found. Check Humanoid avatar rig setup.");
         }
     }
-
     public void EquipToRightHand(ItemData itemData)
     {
         if (itemData == null) return;
         if (rightHand == null) return;
 
-        // Remove previous equipped item
         if (currentRightHandItem != null)
             Destroy(currentRightHandItem.gameObject);
 
-        Vector3 spawnPosition = rightHand.transform.position;
+        Item equippedItem = Instantiate(InventoryManager.Instance.worldItemPrefab);
 
-        Item equippedItem = Instantiate(
-            InventoryManager.Instance.worldItemPrefab,
-            spawnPosition,
-            Quaternion.identity
-        );
+        equippedItem.transform.SetParent(rightHand, false);
+        equippedItem.transform.localPosition = Vector3.zero;
+        equippedItem.transform.localRotation = Quaternion.identity;
 
         equippedItem.InitializeEquippedItem(itemData);
-
         currentRightHandItem = equippedItem;
     }
 
