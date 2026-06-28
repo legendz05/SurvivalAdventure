@@ -3,9 +3,10 @@ using UnityEngine;
 public class PlayerEquipment : MonoBehaviour
 {
     private Animator animator;
-
     private Transform rightHand;
+
     private Item currentRightHandItem;
+    private ItemData currentItemData;
 
     private void Awake()
     {
@@ -24,22 +25,36 @@ public class PlayerEquipment : MonoBehaviour
             Debug.LogError("Right hand bone not found. Check Humanoid avatar rig setup.");
         }
     }
+
     public void EquipToRightHand(ItemData itemData)
     {
-        if (itemData == null) return;
+        if (itemData == null)
+        {
+            UnequipRightHand();
+            return;
+        }
+
         if (rightHand == null) return;
 
-        if (currentRightHandItem != null)
-            Destroy(currentRightHandItem.gameObject);
+        if (currentRightHandItem != null && currentItemData == itemData)
+            return;
 
-        Item equippedItem = Instantiate(InventoryManager.Instance.worldItemPrefab);
+        UnequipRightHand();
 
-        equippedItem.transform.SetParent(rightHand, false);
-        equippedItem.transform.localPosition = Vector3.zero;
-        equippedItem.transform.localRotation = Quaternion.identity;
+        Item equippedItem = Instantiate(
+            InventoryManager.Instance.worldItemPrefab,
+            rightHand,
+            false
+        );
 
         equippedItem.InitializeEquippedItem(itemData);
+
+        equippedItem.transform.localPosition = Vector3.zero;
+        equippedItem.transform.localRotation = Quaternion.identity;
+        equippedItem.transform.localScale = Vector3.one;
+
         currentRightHandItem = equippedItem;
+        currentItemData = itemData;
     }
 
     public void UnequipRightHand()
@@ -49,5 +64,7 @@ public class PlayerEquipment : MonoBehaviour
             Destroy(currentRightHandItem.gameObject);
             currentRightHandItem = null;
         }
+
+        currentItemData = null;
     }
 }

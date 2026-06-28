@@ -74,7 +74,7 @@ public class InventoryManager : MonoBehaviour
         inputManager.ToggleCursorVisibility(false);
         inventoryObj.SetActive(false);
         inventoryOpen = false;
-
+        highlightedSlot = null;
         DestroyPickedItemIcon();
     }
 
@@ -212,7 +212,7 @@ public class InventoryManager : MonoBehaviour
         if (slot >= 0 && slot < hotbarSlots.Count)
             highlightedSlot = hotbarSlots[slot];
 
-        if (playerEquipment != null && highlightedSlot != null && highlightedSlot.itemInSlot != null)
+        if (playerEquipment != null && highlightedSlot != null)
         {
             playerEquipment.EquipToRightHand(highlightedSlot.itemInSlot);
         }
@@ -338,6 +338,11 @@ public class InventoryManager : MonoBehaviour
         RemoveItem(highlightedSlot, amountToDrop);
 
         ThrowItemOnGround(itemToDrop, amountToDrop);
+
+        if (!inventoryOpen && playerEquipment != null)
+        {
+            playerEquipment.EquipToRightHand(highlightedSlot.itemInSlot);
+        }
     }
 
     private void ThrowItemOnGround(ItemData itemData, int amount)

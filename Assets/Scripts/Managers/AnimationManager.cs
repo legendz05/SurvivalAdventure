@@ -10,6 +10,14 @@ public class AnimationManager : MonoBehaviour
         return true;
     }
 
+    public static void PlayAnimation(GameObject gameObject, string animationName)
+    {
+        if (!VerifyAnimatorComponents(gameObject)) return;
+
+        Animator animator = gameObject.GetComponent<Animator>();
+        animator.Play(animationName, 0);
+    }
+
     public static void ActivateTrigger(GameObject gameObject, string triggerName)
     {
         if (!VerifyAnimatorComponents(gameObject))

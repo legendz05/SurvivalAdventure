@@ -51,6 +51,7 @@ public class PlayerManager : MonoBehaviour
         if (inputManager.jumpInput && playerCollision.isGrounded)
         {
             playerMovement.HandleJump();
+            AnimationManager.PlayAnimation(gameObject.transform.GetChild(0).gameObject, "Jump");
             inputManager.HandleResetJump();
         }
     }

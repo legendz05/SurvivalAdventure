@@ -1,4 +1,3 @@
-using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 
 public class Item : MonoBehaviour
@@ -65,22 +64,33 @@ public class Item : MonoBehaviour
     public void InitializeEquippedItem(ItemData data)
     {
         itemData = data;
-        if (itemData == null) return;
+
+        if (itemData == null)
+            return;
 
         meshFilter.mesh = itemData.itemMesh;
         meshRenderer.material = itemData.itemMaterial;
 
-        boxCollider.enabled = true;
-        boxCollider.isTrigger = true;
-
-        if (rb != null)
-        {
-            rb.isKinematic = true;
-            rb.useGravity = false;
-        }
-
         itemIcon = itemData.itemIcon;
         maxStack = itemData.maxStack;
+        stackAmount = 1;
+
+        // It is equipped now, not a world pickup.
+        isPickedUp = true;
+        isFloating = false;
+
+        // Disable all colliders on the equipped visual.
+        foreach (Collider col in GetComponentsInChildren<Collider>())
+        {
+            col.enabled = false;
+        }
+
+        // Do not let physics control something parented to an animated hand.
+        if (rb != null)
+        {
+            Destroy(rb);
+            rb = null;
+        }
     }
 
     private void Update()
