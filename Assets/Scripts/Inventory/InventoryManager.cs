@@ -13,7 +13,7 @@ public class InventoryManager : MonoBehaviour
     private GraphicRaycaster graphicRaycaster;
     private PlayerEquipment playerEquipment;
     private EventSystem eventSystem;
-    [SerializeField] private Item worldItemPrefab;
+    public Item worldItemPrefab;
 
     private Canvas canvas;
     private RectTransform canvasRect;
@@ -212,9 +212,9 @@ public class InventoryManager : MonoBehaviour
         if (slot >= 0 && slot < hotbarSlots.Count)
             highlightedSlot = hotbarSlots[slot];
 
-        if (playerEquipment != null)
+        if (playerEquipment != null && highlightedSlot != null && highlightedSlot.itemInSlot != null)
         {
-            // playerEquipment.EquipToRightHand();
+            playerEquipment.EquipToRightHand(highlightedSlot.itemInSlot);
         }
     }
 

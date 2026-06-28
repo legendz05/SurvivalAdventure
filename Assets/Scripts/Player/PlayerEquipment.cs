@@ -5,7 +5,7 @@ public class PlayerEquipment : MonoBehaviour
     private Animator animator;
 
     private Transform rightHand;
-    private GameObject currentRightHandItem;
+    private Item currentRightHandItem;
 
     private void Awake()
     {
@@ -25,27 +25,33 @@ public class PlayerEquipment : MonoBehaviour
         }
     }
 
-    public void EquipToRightHand(GameObject itemPrefab)
+    public void EquipToRightHand(ItemData itemData)
     {
-        if (itemPrefab == null) return;
+        if (itemData == null) return;
         if (rightHand == null) return;
 
         // Remove previous equipped item
         if (currentRightHandItem != null)
-            Destroy(currentRightHandItem);
+            Destroy(currentRightHandItem.gameObject);
 
-        currentRightHandItem = Instantiate(itemPrefab, rightHand);
+        Vector3 spawnPosition = rightHand.transform.position;
 
-        currentRightHandItem.transform.localPosition = Vector3.zero;
-        currentRightHandItem.transform.localRotation = Quaternion.identity;
-        currentRightHandItem.transform.localScale = Vector3.one;
+        Item equippedItem = Instantiate(
+            InventoryManager.Instance.worldItemPrefab,
+            spawnPosition,
+            Quaternion.identity
+        );
+
+        equippedItem.InitializeEquippedItem(itemData);
+
+        currentRightHandItem = equippedItem;
     }
 
     public void UnequipRightHand()
     {
         if (currentRightHandItem != null)
         {
-            Destroy(currentRightHandItem);
+            Destroy(currentRightHandItem.gameObject);
             currentRightHandItem = null;
         }
     }

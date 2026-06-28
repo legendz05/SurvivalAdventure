@@ -62,8 +62,28 @@ public class Item : MonoBehaviour
         pickupAllowedTime = Time.time + pickupDelayTime;
     }
 
+    public void InitializeEquippedItem(ItemData data)
+    {
+        itemData = data;
+
+        if (itemData == null)
+            return;
+
+        meshFilter.mesh = itemData.itemMesh;
+        meshRenderer.material = itemData.itemMaterial;
+
+        boxCollider.enabled = true;
+        boxCollider.isTrigger = true;
+
+        itemIcon = itemData.itemIcon;
+        maxStack = itemData.maxStack;
+    }
+
     private void Update()
     {
+        if (isPickedUp)
+            return;
+
         if (!isFloating)
             return;
 
